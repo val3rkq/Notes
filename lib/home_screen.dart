@@ -12,8 +12,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // variables for scroll
-  final ScrollController _scrollController = ScrollController();
+  // // variables for scroll
+  // final ScrollController _scrollController = ScrollController();
 
   // database
   var noteBox = Hive.box('noteBox');
@@ -26,14 +26,14 @@ class _HomeScreenState extends State<HomeScreen> {
   // add new note
   void addNote() {
     setState(() {
-      db.notes.add(titleController.text.toString());
-      db.descriptions.add(descriptionController.text.toString());
+      db.notes.insert(0, titleController.text.toString());
+      db.descriptions.insert(0, descriptionController.text.toString());
       titleController.clear();
       descriptionController.clear();
     });
     db.updateDB();
-    // scroll to bottom
-    SchedulerBinding.instance.addPostFrameCallback((_) => scrollToBottom());
+    // // scroll to bottom
+    // SchedulerBinding.instance.addPostFrameCallback((_) => scrollToBottom());
   }
 
   // edit current note and put this on first position in notesList
@@ -62,14 +62,14 @@ class _HomeScreenState extends State<HomeScreen> {
     db.updateDB();
   }
 
-  // scroll our notesList to bottom when i add new note
-  void scrollToBottom() {
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
-      duration: Duration(milliseconds: 1000),
-      curve: Curves.easeInOut,
-    );
-  }
+  // // scroll our notesList to bottom when i add new note
+  // void scrollToBottom() {
+  //   _scrollController.animateTo(
+  //     _scrollController.position.maxScrollExtent,
+  //     duration: Duration(milliseconds: 1000),
+  //     curve: Curves.easeInOut,
+  //   );
+  // }
 
   // show bottom sheet for creating tasks
   void createNote({required bool isEdit, required int index}) {
@@ -137,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
         child: ListView.builder(
-          controller: _scrollController,
+          // controller: _scrollController,
           itemCount: db.notes.length,
           itemBuilder: (context, index) {
             return Center(
