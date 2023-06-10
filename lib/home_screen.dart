@@ -20,15 +20,15 @@ class _HomeScreenState extends State<HomeScreen> {
   NoteDB db = NoteDB();
 
   // controllers for editing text
-  TextEditingController nameController = TextEditingController();
+  TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
   // add new note
   void addNote() {
     setState(() {
-      db.notes.add(nameController.text.toString());
+      db.notes.add(titleController.text.toString());
       db.descriptions.add(descriptionController.text.toString());
-      nameController.clear();
+      titleController.clear();
       descriptionController.clear();
     });
     db.updateDB();
@@ -40,12 +40,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void editNote(int index) {
     setState(() {
       db.notes.removeAt(index);
-      db.notes.insert(0, nameController.text.toString());
+      db.notes.insert(0, titleController.text.toString());
 
       db.descriptions.removeAt(index);
       db.descriptions.insert(0, descriptionController.text.toString());
 
-      nameController.clear();
+      titleController.clear();
       descriptionController.clear();
     });
     db.updateDB();
@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       db.notes.removeAt(index);
       db.descriptions.removeAt(index);
-      nameController.clear();
+      titleController.clear();
       descriptionController.clear();
     });
     db.updateDB();
@@ -75,10 +75,10 @@ class _HomeScreenState extends State<HomeScreen> {
   void createNote({required bool isEdit, required int index}) {
     setState(() {
       if (isEdit) {
-        nameController.text = db.notes[index];
+        titleController.text = db.notes[index];
         descriptionController.text = db.descriptions[index];
       } else {
-        nameController.text = '';
+        titleController.text = '';
         descriptionController.text = '';
       }
     });
@@ -299,9 +299,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   TextFormField(
                     autofocus: isEdit ? false : true,
-                    controller: nameController,
+                    controller: titleController,
                     decoration: InputDecoration(
-                        hintText: 'Name of the note',
+                        hintText: 'Note title',
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
                             borderSide:
@@ -320,7 +320,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     controller: descriptionController,
                     maxLines: 15,
                     decoration: InputDecoration(
-                        hintText: 'Describe the note',
+                        hintText: 'Describe note',
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
                             borderSide:
