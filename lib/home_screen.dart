@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:notes/model/note_db.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -11,12 +13,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   // variables for scroll
-  late ScrollController _scrollController;
-  final lastKey = GlobalKey();
+  final ScrollController _scrollController = ScrollController();
 
   // database
-  List<String> notes = [];
-  List<String> descriptions = [];
+  var noteBox = Hive.box('noteBox');
+  NoteDB db = NoteDB();
 
   // controllers for editing text
   TextEditingController nameController = TextEditingController();
@@ -25,39 +26,45 @@ class _HomeScreenState extends State<HomeScreen> {
   // add new note
   void addNote() {
     setState(() {
-      notes.add(shortLine(nameController.text.toString(), 35));
-      descriptions.add(shortLine(descriptionController.text.toString(), 40));
+      db.notes.add(shortLine(nameController.text.toString(), 35));
+      db.descriptions.add(shortLine(descriptionController.text.toString(), 40));
+      nameController.clear();
+      descriptionController.clear();
     });
-    closeBottomSheet();
+    db.updateDB();
     // scroll to bottom
     SchedulerBinding.instance.addPostFrameCallback((_) => scrollToBottom());
   }
 
-  // edit current note note
+  // edit current note
   void editNote(int index) {
     setState(() {
-      notes[index] = nameController.text.toString();
-      descriptions[index] = descriptionController.text.toString();
+      db.notes[index] = shortLine(nameController.text.toString(), 35);
+      db.descriptions[index] = shortLine(descriptionController.text.toString(), 40);
 
       // put current note on first position in notesList
-      String currentNote = notes[index];
-      notes[0] = notes[index];
-      notes[index] = currentNote;
+      String currentNote = db.notes[index];
+      db.notes[0] = db.notes[index];
+      db.notes[index] = currentNote;
 
-      String currentDescription = descriptions[index];
-      descriptions[0] = descriptions[index];
-      descriptions[index] = currentDescription;
+      String currentDescription = db.descriptions[index];
+      db.descriptions[0] = db.descriptions[index];
+      db.descriptions[index] = currentDescription;
+      nameController.clear();
+      descriptionController.clear();
     });
-    closeBottomSheet();
+    db.updateDB();
   }
 
   // delete this note
   void deleteNote(int index) {
     setState(() {
-      notes.removeAt(index);
-      descriptions.removeAt(index);
+      db.notes.removeAt(index);
+      db.descriptions.removeAt(index);
+      nameController.clear();
+      descriptionController.clear();
     });
-    closeBottomSheet();
+    db.updateDB();
   }
 
   // return first line of note_name and note_description if they are too long
@@ -71,20 +78,20 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // scroll our notesList to bottom when i add new note
-  void scrollToBottom() async {
-    await _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 350),
-        curve: Curves.easeOut);
-    Scrollable.ensureVisible(lastKey.currentContext!);
+  void scrollToBottom() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: Duration(milliseconds: 1500),
+      curve: Curves.easeOut,
+    );
   }
 
   // show bottom sheet for creating tasks
   void createNote({required bool isEdit, required int index}) {
     setState(() {
       if (isEdit) {
-        nameController.text = notes[index];
-        descriptionController.text = descriptions[index];
+        nameController.text = db.notes[index];
+        descriptionController.text = db.descriptions[index];
       } else {
         nameController.text = '';
         descriptionController.text = '';
@@ -105,18 +112,14 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void closeBottomSheet() {
-    setState(() {
-      FocusManager.instance.primaryFocus?.unfocus();
-      nameController.clear();
-      descriptionController.clear();
-    });
-  }
-
   @override
   void initState() {
-    _scrollController = ScrollController();
     super.initState();
+    if (noteBox.get('NOTES') == null) {
+      db.createInitialData();
+    } else {
+      db.loadData();
+    }
   }
 
   @override
@@ -150,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
         child: ListView.builder(
           controller: _scrollController,
-          itemCount: notes.length,
+          itemCount: db.notes.length,
           itemBuilder: (context, index) {
             return Center(
               child: Padding(
@@ -194,12 +197,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                notes[index],
+                                db.notes[index],
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 18),
                               ),
                               Text(
-                                descriptions[index],
+                                db.descriptions[index],
                                 style: TextStyle(
                                     color: Colors.black54, fontSize: 15),
                               ),
@@ -217,7 +220,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          createNote(isEdit: false, index: notes.length);
+          createNote(isEdit: false, index: db.notes.length);
         },
         backgroundColor: Colors.black,
         child: Icon(
@@ -231,7 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Container AddNoteBottomSheet(BuildContext context, bool isEdit, int index) {
     return Container(
       padding:
-      EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       height: 700,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -241,7 +244,6 @@ class _HomeScreenState extends State<HomeScreen> {
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
-              closeBottomSheet();
             },
             icon: Icon(
               Icons.close_rounded,
@@ -255,15 +257,15 @@ class _HomeScreenState extends State<HomeScreen> {
           actions: [
             isEdit
                 ? IconButton(
-              onPressed: () {
-                deleteNote(index);
-                Navigator.pop(context);
-              },
-              icon: Icon(
-                Icons.delete_rounded,
-                color: Colors.black,
-              ),
-            )
+                    onPressed: () {
+                      deleteNote(index);
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      Icons.delete_rounded,
+                      color: Colors.black,
+                    ),
+                  )
                 : SizedBox(),
             IconButton(
               onPressed: () {
@@ -297,13 +299,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
                             borderSide:
-                            BorderSide(color: Color(0xFFDDDDDD), width: 2)),
+                                BorderSide(color: Color(0xFFDDDDDD), width: 2)),
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
                             borderSide:
-                            BorderSide(color: Colors.black38, width: 1)),
+                                BorderSide(color: Colors.black38, width: 1)),
                         hintStyle:
-                        TextStyle(color: Color(0xFF676767), fontSize: 15)),
+                            TextStyle(color: Color(0xFF676767), fontSize: 15)),
                   ),
                   SizedBox(
                     height: 18,
@@ -316,13 +318,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
                             borderSide:
-                            BorderSide(color: Color(0xFFDDDDDD), width: 2)),
+                                BorderSide(color: Color(0xFFDDDDDD), width: 2)),
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
                             borderSide:
-                            BorderSide(color: Colors.black38, width: 1)),
+                                BorderSide(color: Colors.black38, width: 1)),
                         hintStyle:
-                        TextStyle(color: Color(0xFF676767), fontSize: 15)),
+                            TextStyle(color: Color(0xFF676767), fontSize: 15)),
                   ),
                   SizedBox(
                     height: 18,

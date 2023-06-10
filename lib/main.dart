@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 
 void main() async {
-  await noteBox = Hive.getBox('noteBox');
+  await Hive.initFlutter();
+  var noteBox = await Hive.openBox('noteBox');
   runApp(MyApp());
 }
 
