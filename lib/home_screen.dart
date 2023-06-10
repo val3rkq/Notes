@@ -26,8 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
   // add new note
   void addNote() {
     setState(() {
-      db.notes.add(shortLine(nameController.text.toString(), 35));
-      db.descriptions.add(shortLine(descriptionController.text.toString(), 40));
+      db.notes.add(nameController.text.toString());
+      db.descriptions.add(descriptionController.text.toString());
       nameController.clear();
       descriptionController.clear();
     });
@@ -36,20 +36,15 @@ class _HomeScreenState extends State<HomeScreen> {
     SchedulerBinding.instance.addPostFrameCallback((_) => scrollToBottom());
   }
 
-  // edit current note
+  // edit current note and put this on first position in notesList
   void editNote(int index) {
     setState(() {
-      db.notes[index] = shortLine(nameController.text.toString(), 35);
-      db.descriptions[index] = shortLine(descriptionController.text.toString(), 40);
+      db.notes.removeAt(index);
+      db.notes.insert(0, nameController.text.toString());
 
-      // put current note on first position in notesList
-      String currentNote = db.notes[index];
-      db.notes[0] = db.notes[index];
-      db.notes[index] = currentNote;
+      db.descriptions.removeAt(index);
+      db.descriptions.insert(0, descriptionController.text.toString());
 
-      String currentDescription = db.descriptions[index];
-      db.descriptions[0] = db.descriptions[index];
-      db.descriptions[index] = currentDescription;
       nameController.clear();
       descriptionController.clear();
     });
@@ -65,16 +60,6 @@ class _HomeScreenState extends State<HomeScreen> {
       descriptionController.clear();
     });
     db.updateDB();
-  }
-
-  // return first line of note_name and note_description if they are too long
-  String shortLine(String line, int maxCountSymbols) {
-    if (line.length > maxCountSymbols) {
-      String line1;
-      line1 = '${line.substring(0, maxCountSymbols - 3)}...';
-      return line1;
-    }
-    return line;
   }
 
   // scroll our notesList to bottom when i add new note
@@ -191,22 +176,38 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                db.notes[index],
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 18),
-                              ),
-                              Text(
-                                db.descriptions[index],
-                                style: TextStyle(
-                                    color: Colors.black54, fontSize: 15),
-                              ),
-                            ],
+                          Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  db.notes[index],
+                                  softWrap: false,
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 18),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  db.descriptions[index],
+                                  maxLines: 5,
+                                  softWrap: false,
+                                  style: TextStyle(
+                                      color: Colors.black54, fontSize: 15),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              size: 20,
+                            ),
                           ),
                         ],
                       ),
@@ -218,14 +219,19 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          createNote(isEdit: false, index: db.notes.length);
-        },
-        backgroundColor: Colors.black,
-        child: Icon(
-          Icons.edit_rounded,
-          size: 27,
+      floatingActionButton: Container(
+        width: 65,
+        height: 65,
+        child: FittedBox(
+          child: FloatingActionButton(
+            onPressed: () {
+              createNote(isEdit: false, index: db.notes.length);
+            },
+            backgroundColor: Colors.black,
+            child: Icon(
+              Icons.edit_rounded,
+            ),
+          ),
         ),
       ),
     );
