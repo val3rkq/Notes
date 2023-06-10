@@ -66,8 +66,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void scrollToBottom() {
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
-      duration: Duration(milliseconds: 1500),
-      curve: Curves.easeOut,
+      duration: Duration(milliseconds: 1000),
+      curve: Curves.easeInOut,
     );
   }
 
@@ -180,26 +180,33 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Flexible(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  db.notes[index],
-                                  softWrap: false,
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 18),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                Text(
-                                  db.descriptions[index],
-                                  maxLines: 5,
-                                  softWrap: false,
-                                  style: TextStyle(
-                                      color: Colors.black54, fontSize: 15),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
+                            child: Padding(
+
+                              padding: EdgeInsets.symmetric(horizontal: 5),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    db.notes[index],
+                                    softWrap: false,
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 18),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  SizedBox(
+                                    height: 4,
+                                  ),
+                                  Text(
+                                    db.descriptions[index],
+                                    maxLines: 5,
+                                    softWrap: false,
+                                    style: TextStyle(
+                                        color: Colors.black54, fontSize: 15),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                           Align(
