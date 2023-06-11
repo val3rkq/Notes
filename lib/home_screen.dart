@@ -5,6 +5,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:notes/model/note_db.dart';
 import 'package:intl/intl.dart';
+// import 'package:notes/model/recycle_db.dart';
+// import 'recycle_bin_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -20,6 +22,10 @@ class _HomeScreenState extends State<HomeScreen> {
   // database
   var noteBox = Hive.box('noteBox');
   NoteDB db = NoteDB();
+
+  // var recycleBox = Hive.box('recycleBox');
+  // RecycleDB dbr = RecycleDB();
+
 
   // controllers for editing text
   TextEditingController titleController = TextEditingController();
@@ -62,8 +68,13 @@ class _HomeScreenState extends State<HomeScreen> {
   // delete this note
   void deleteNote(int index) {
     setState(() {
+      // dbr.notes.insert(0, db.notes[index]);
       db.notes.removeAt(index);
+
+      // dbr.descriptions.insert(0, db.descriptions[index]);
       db.descriptions.removeAt(index);
+
+      // dbr.dates.insert(0, db.dates[index]);
       db.dates.removeAt(index);
 
       titleController.clear();
@@ -71,6 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     db.updateDB();
   }
+
+
 
   // // scroll our notesList to bottom when i add new note
   // void scrollToBottom() {
@@ -132,27 +145,48 @@ class _HomeScreenState extends State<HomeScreen> {
         // shadowColor: Colors.black,
         toolbarHeight: 60,
         backgroundColor: Color(0xFF8EC3B0),
-
-        // backgroundColor: Color(0xFF0E8388),
-        // backgroundColor: Color(0xFF0FC9DF),
-        // backgroundColor: Color(0xFfF59D39),
+        // actions: [
+        //   PopupMenuButton<int>(
+        //     itemBuilder: (context) => [
+        //       PopupMenuItem(
+        //         // padding: EdgeInsets.all(0),
+        //         value: 1,
+        //         child: InkWell(
+        //           child: Row(
+        //             mainAxisAlignment: MainAxisAlignment.center,
+        //             children: [
+        //               Icon(
+        //                 Icons.delete_rounded,
+        //                 color: Colors.black,
+        //               ),
+        //               SizedBox(width: 10,),
+        //               Text(
+        //                 "Recycle Bin",
+        //                 style: TextStyle(color: Colors.black, fontSize: 15),
+        //               ),
+        //             ],
+        //           ),
+        //           onTap: () {
+        //             Navigator.pop(context);
+        //             Navigator.of(context).push(MaterialPageRoute(
+        //                 builder: (context) => RecycleBinScreen()));
+        //           },
+        //         ),
+        //       ),
+        //     ],
+        //     offset: Offset(-15, 50),
+        //     color: Colors.white,
+        //     icon: Icon(
+        //       Icons.more_vert_rounded,
+        //       color: Colors.black,
+        //     ),
+        //     elevation: 4,
+        //   ),
+        // ],
       ),
       body: Container(
         decoration: BoxDecoration(
-          // gradient: LinearGradient(
-          //   begin: Alignment.topLeft,
-          //   end: Alignment.bottomRight,
-          //   colors: [
-          //     // Color(0xFFC9DBB2),
-          //     // Color(0xFFEFFFFD),
-          //     // Color(0xFFEFFFFD),
-          //     Color(0xFFC2FFF9),
-          //     Color(0xFFC2FFF9),
-          //     // Color(0xFF2E4F4F),
-          //   ],
-          // ),
           color: Color(0xFFDEF5E5),
-          // color: Colors.white,
         ),
         padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
         child: ListView.builder(
@@ -254,8 +288,6 @@ class _HomeScreenState extends State<HomeScreen> {
               createNote(isEdit: false, index: db.notes.length);
             },
             backgroundColor: Color(0xFFBCEAD5),
-            // backgroundColor: Color(0xFF0FC9DF),
-            // backgroundColor: Colors.orange,
             child: Icon(
               Icons.edit_rounded,
               color: Colors.black,
