@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:notes/model/note_db.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -28,6 +30,8 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       db.notes.insert(0, titleController.text.toString());
       db.descriptions.insert(0, descriptionController.text.toString());
+      db.dates
+          .insert(0, DateFormat('dd MMM yyyy kk:mm').format(DateTime.now()));
       titleController.clear();
       descriptionController.clear();
     });
@@ -45,6 +49,10 @@ class _HomeScreenState extends State<HomeScreen> {
       db.descriptions.removeAt(index);
       db.descriptions.insert(0, descriptionController.text.toString());
 
+      db.dates.removeAt(index);
+      db.dates
+          .insert(0, DateFormat('dd MMM yyyy kk:mm').format(DateTime.now()));
+
       titleController.clear();
       descriptionController.clear();
     });
@@ -56,6 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       db.notes.removeAt(index);
       db.descriptions.removeAt(index);
+      db.dates.removeAt(index);
+
       titleController.clear();
       descriptionController.clear();
     });
@@ -116,33 +126,42 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text(
           'NOTES',
           style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
+              fontWeight: FontWeight.bold, fontSize: 22, color: Colors.black),
         ),
         elevation: 0,
-        toolbarHeight: 65,
-        backgroundColor: Colors.indigo[600],
+        // shadowColor: Colors.black,
+        toolbarHeight: 60,
+        backgroundColor: Color(0xFF8EC3B0),
+
+        // backgroundColor: Color(0xFF0E8388),
+        // backgroundColor: Color(0xFF0FC9DF),
+        // backgroundColor: Color(0xFfF59D39),
       ),
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              Colors.white,
-              Colors.white,
-            ],
-          ),
+          // gradient: LinearGradient(
+          //   begin: Alignment.topLeft,
+          //   end: Alignment.bottomRight,
+          //   colors: [
+          //     // Color(0xFFC9DBB2),
+          //     // Color(0xFFEFFFFD),
+          //     // Color(0xFFEFFFFD),
+          //     Color(0xFFC2FFF9),
+          //     Color(0xFFC2FFF9),
+          //     // Color(0xFF2E4F4F),
+          //   ],
+          // ),
+          color: Color(0xFFDEF5E5),
+          // color: Colors.white,
         ),
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
         child: ListView.builder(
           // controller: _scrollController,
           itemCount: db.notes.length,
           itemBuilder: (context, index) {
             return Center(
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 15),
+                padding: EdgeInsets.symmetric(vertical: 8),
                 child: Slidable(
                   endActionPane: ActionPane(
                     motion: StretchMotion(),
@@ -152,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           deleteNote(index);
                         },
                         icon: Icons.delete_rounded,
-                        backgroundColor: Colors.red.shade400,
+                        backgroundColor: Color(0xFFF16866),
                         borderRadius: BorderRadius.circular(17),
                       ),
                     ],
@@ -168,10 +187,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: Colors.white,
                         boxShadow: [
                           BoxShadow(
+                            // color: Colors.transparent,
                             color: Colors.grey.withOpacity(0.55),
-                            spreadRadius: 2,
-                            blurRadius: 10,
-                            offset: Offset(0, 6), // changes position of shadow
+                            spreadRadius: 0.5,
+                            blurRadius: 6,
+                            offset: Offset(0, 2), // changes position of shadow
                           ),
                         ],
                       ),
@@ -181,7 +201,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Flexible(
                             child: Padding(
-
                               padding: EdgeInsets.symmetric(horizontal: 5),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -234,9 +253,12 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               createNote(isEdit: false, index: db.notes.length);
             },
-            backgroundColor: Colors.black,
+            backgroundColor: Color(0xFFBCEAD5),
+            // backgroundColor: Color(0xFF0FC9DF),
+            // backgroundColor: Colors.orange,
             child: Icon(
               Icons.edit_rounded,
+              color: Colors.black,
             ),
           ),
         ),
@@ -298,14 +320,29 @@ class _HomeScreenState extends State<HomeScreen> {
           centerTitle: true,
           toolbarHeight: 60,
         ),
+        backgroundColor: Colors.white,
         body: Center(
           child: Padding(
-            padding: EdgeInsets.only(left: 16, right: 16, top: 25),
+            padding: EdgeInsets.only(left: 16, right: 16, top: 10),
             child: SafeArea(
               child: ListView(
                 children: [
+                  isEdit
+                      ? Align(
+                          alignment: Alignment.topRight,
+                          child: Container(
+                            margin: EdgeInsets.only(bottom: 10, right: 5),
+                            child: Text(
+                              db.dates[index],
+                              style: TextStyle(
+                                  color: Colors.black54, fontSize: 12),
+                            ),
+                          ),
+                        )
+                      : Container(),
                   TextFormField(
                     autofocus: isEdit ? false : true,
+                    textCapitalization: TextCapitalization.sentences,
                     controller: titleController,
                     decoration: InputDecoration(
                         hintText: 'Note title',
@@ -325,6 +362,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   TextFormField(
                     controller: descriptionController,
+                    textCapitalization: TextCapitalization.sentences,
                     maxLines: 15,
                     decoration: InputDecoration(
                         hintText: 'Describe note',

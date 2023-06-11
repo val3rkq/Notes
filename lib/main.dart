@@ -6,6 +6,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 void main() async {
   await Hive.initFlutter();
   var noteBox = await Hive.openBox('noteBox');
+  // noteBox.deleteAll(noteBox.keys);
   runApp(MyApp());
 }
 
