@@ -144,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         // shadowColor: Colors.black,
         toolbarHeight: 60,
-        backgroundColor: Color(0xFF8EC3B0),
+        backgroundColor: Color(0xFF7AD4B4),
         // actions: [
         //   PopupMenuButton<int>(
         //     itemBuilder: (context) => [
@@ -287,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               createNote(isEdit: false, index: db.notes.length);
             },
-            backgroundColor: Color(0xFFBCEAD5),
+            backgroundColor: Color(0xFF6EE9B1),
             child: Icon(
               Icons.edit_rounded,
               color: Colors.black,
