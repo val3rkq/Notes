@@ -5,8 +5,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:notes/model/note_db.dart';
 import 'package:intl/intl.dart';
-// import 'package:notes/model/recycle_db.dart';
-// import 'recycle_bin_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -16,16 +14,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // // variables for scroll
-  // final ScrollController _scrollController = ScrollController();
-
   // database
   var noteBox = Hive.box('noteBox');
   NoteDB db = NoteDB();
-
-  // var recycleBox = Hive.box('recycleBox');
-  // RecycleDB dbr = RecycleDB();
-
 
   // controllers for editing text
   TextEditingController titleController = TextEditingController();
@@ -83,17 +74,6 @@ class _HomeScreenState extends State<HomeScreen> {
     db.updateDB();
   }
 
-
-
-  // // scroll our notesList to bottom when i add new note
-  // void scrollToBottom() {
-  //   _scrollController.animateTo(
-  //     _scrollController.position.maxScrollExtent,
-  //     duration: Duration(milliseconds: 1000),
-  //     curve: Curves.easeInOut,
-  //   );
-  // }
-
   // show bottom sheet for creating tasks
   void createNote({required bool isEdit, required int index}) {
     setState(() {
@@ -109,13 +89,13 @@ class _HomeScreenState extends State<HomeScreen> {
       isScrollControlled: true,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(25.0),
         ),
       ),
       builder: (BuildContext context) {
-        return AddNoteBottomSheet(context, isEdit, index);
+        return addNoteBottomSheet(context, isEdit, index);
       },
     );
   }
@@ -136,76 +116,37 @@ class _HomeScreenState extends State<HomeScreen> {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
+        title: const Text(
           'NOTES',
           style: TextStyle(
               fontWeight: FontWeight.bold, fontSize: 22, color: Colors.black),
         ),
         elevation: 0,
-        // shadowColor: Colors.black,
         toolbarHeight: 60,
-        backgroundColor: Color(0xFF7AD4B4),
-        // actions: [
-        //   PopupMenuButton<int>(
-        //     itemBuilder: (context) => [
-        //       PopupMenuItem(
-        //         // padding: EdgeInsets.all(0),
-        //         value: 1,
-        //         child: InkWell(
-        //           child: Row(
-        //             mainAxisAlignment: MainAxisAlignment.center,
-        //             children: [
-        //               Icon(
-        //                 Icons.delete_rounded,
-        //                 color: Colors.black,
-        //               ),
-        //               SizedBox(width: 10,),
-        //               Text(
-        //                 "Recycle Bin",
-        //                 style: TextStyle(color: Colors.black, fontSize: 15),
-        //               ),
-        //             ],
-        //           ),
-        //           onTap: () {
-        //             Navigator.pop(context);
-        //             Navigator.of(context).push(MaterialPageRoute(
-        //                 builder: (context) => RecycleBinScreen()));
-        //           },
-        //         ),
-        //       ),
-        //     ],
-        //     offset: Offset(-15, 50),
-        //     color: Colors.white,
-        //     icon: Icon(
-        //       Icons.more_vert_rounded,
-        //       color: Colors.black,
-        //     ),
-        //     elevation: 4,
-        //   ),
-        // ],
+        backgroundColor: const Color(0xFF7AD4B4),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Color(0xFFDEF5E5),
         ),
-        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
         child: ListView.builder(
           // controller: _scrollController,
           itemCount: db.notes.length,
           itemBuilder: (context, index) {
             return Center(
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 8),
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Slidable(
                   endActionPane: ActionPane(
-                    motion: StretchMotion(),
+                    motion: const StretchMotion(),
                     children: [
                       SlidableAction(
                         onPressed: (BuildContext context) {
                           deleteNote(index);
                         },
                         icon: Icons.delete_rounded,
-                        backgroundColor: Color(0xFFF16866),
+                        backgroundColor: const Color(0xFFF16866),
                         borderRadius: BorderRadius.circular(17),
                       ),
                     ],
@@ -215,17 +156,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       createNote(isEdit: true, index: index);
                     },
                     child: Container(
-                      padding: EdgeInsets.all(15),
+                      padding: const EdgeInsets.all(15),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(17),
                         color: Colors.white,
                         boxShadow: [
                           BoxShadow(
-                            // color: Colors.transparent,
                             color: Colors.grey.withOpacity(0.55),
                             spreadRadius: 0.5,
                             blurRadius: 6,
-                            offset: Offset(0, 2), // changes position of shadow
+                            offset: const Offset(0, 2), // changes position of shadow
                           ),
                         ],
                       ),
@@ -235,26 +175,26 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Flexible(
                             child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 5),
+                              padding: const EdgeInsets.symmetric(horizontal: 5),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     db.notes[index],
                                     softWrap: false,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         color: Colors.black, fontSize: 18),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 4,
                                   ),
                                   Text(
                                     db.descriptions[index],
                                     maxLines: 5,
                                     softWrap: false,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         color: Colors.black54, fontSize: 15),
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -262,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          Align(
+                          const Align(
                             alignment: Alignment.centerRight,
                             child: Icon(
                               Icons.arrow_forward_ios_rounded,
@@ -279,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
       ),
-      floatingActionButton: Container(
+      floatingActionButton: SizedBox(
         width: 65,
         height: 65,
         child: FittedBox(
@@ -287,8 +227,8 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               createNote(isEdit: false, index: db.notes.length);
             },
-            backgroundColor: Color(0xFF6EE9B1),
-            child: Icon(
+            backgroundColor: const Color(0xFF6EE9B1),
+            child: const Icon(
               Icons.edit_rounded,
               color: Colors.black,
             ),
@@ -298,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Container AddNoteBottomSheet(BuildContext context, bool isEdit, int index) {
+  Container addNoteBottomSheet(BuildContext context, bool isEdit, int index) {
     return Container(
       padding:
           EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -312,14 +252,14 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.close_rounded,
               color: Colors.black,
             ),
           ),
           title: Text(
             !isEdit ? 'Make Note' : 'Edit Note',
-            style: TextStyle(color: Colors.black, fontSize: 18),
+            style: const TextStyle(color: Colors.black, fontSize: 18),
           ),
           actions: [
             isEdit
@@ -328,12 +268,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       deleteNote(index);
                       Navigator.pop(context);
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.delete_rounded,
                       color: Colors.black,
                     ),
                   )
-                : SizedBox(),
+                : const SizedBox(),
             IconButton(
               onPressed: () {
                 if (isEdit) {
@@ -343,7 +283,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
                 Navigator.pop(context);
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.check_rounded,
                 color: Colors.black,
               ),
@@ -355,7 +295,7 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.white,
         body: Center(
           child: Padding(
-            padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 10),
             child: SafeArea(
               child: ListView(
                 children: [
@@ -363,10 +303,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ? Align(
                           alignment: Alignment.topRight,
                           child: Container(
-                            margin: EdgeInsets.only(bottom: 10, right: 5),
+                            margin: const EdgeInsets.only(bottom: 10, right: 5),
                             child: Text(
                               db.dates[index],
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.black54, fontSize: 12),
                             ),
                           ),
@@ -376,7 +316,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     autofocus: isEdit ? false : true,
                     textCapitalization: TextCapitalization.sentences,
                     controller: titleController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         hintText: 'Note title',
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -389,14 +329,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         hintStyle:
                             TextStyle(color: Color(0xFF676767), fontSize: 15)),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 18,
                   ),
                   TextFormField(
                     controller: descriptionController,
                     textCapitalization: TextCapitalization.sentences,
                     maxLines: 15,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         hintText: 'Describe note',
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -409,7 +349,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         hintStyle:
                             TextStyle(color: Color(0xFF676767), fontSize: 15)),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 18,
                   ),
                 ],
