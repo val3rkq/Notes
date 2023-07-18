@@ -166,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ? const NoDataWidget()
             : SlidableAutoCloseBehavior(
                 child: ListView.builder(
-                  // shrinkWrap: true,
+                  shrinkWrap: true,
                   controller: _scrollController,
                   reverse: true,
                   itemCount: db.notes.length,
