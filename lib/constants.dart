@@ -17,8 +17,8 @@ Color white9 = Colors.white.withOpacity(0.9);
 
 // text styles
 TextStyle hintTextStyle = TextStyle(color: grey, fontSize: 16);
-TextStyle timeWidgetTextStyle = TextStyle(fontSize: 13, color: white6);
-TextStyle dateTextStyle = TextStyle(fontSize: 20, color: white8);
+TextStyle timeWidgetTextStyle = TextStyle(color: white6, fontSize: 13);
+TextStyle dateTextStyle = TextStyle(color: white8, fontSize: 18);
 TextStyle noteTitleTextStyle = TextStyle(color: white9, fontSize: 18);
 TextStyle noteSubtitleTextStyle = TextStyle(color: white5, fontSize: 15);
 
