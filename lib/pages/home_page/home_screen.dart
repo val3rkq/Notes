@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
@@ -27,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // controllers
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   // add new note
   void addNote() {
@@ -50,6 +52,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // we don't need to use setState here,
     // because it is used when add_note_page closes
+
+    // scroll controller -> scroll up (listview is reversed)
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    });
   }
 
   // edit current note and put it on first position in notesList
@@ -63,6 +70,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // we don't need to use setState here,
     // because it is used when add_note_page closes
+
+    // scroll controller -> scroll up (listview is reversed)
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    });
   }
 
   // delete note by index
@@ -73,12 +85,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     db.updateDB();
     setState(() {});
-  }
-
-  // clear controllers
-  void clearControllers() {
-    titleController.clear();
-    descriptionController.clear();
   }
 
   // show bottom sheet for creating tasks
@@ -125,12 +131,18 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       db.loadData();
     }
+
+    // init scroll controller
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    });
   }
 
   @override
   void dispose() {
     titleController.dispose();
     descriptionController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -154,7 +166,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ? const NoDataWidget()
             : SlidableAutoCloseBehavior(
                 child: ListView.builder(
-                  shrinkWrap: true,
+                  // shrinkWrap: true,
+                  controller: _scrollController,
                   reverse: true,
                   itemCount: db.notes.length,
                   itemBuilder: (context, index) {
@@ -172,6 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                           // show notes for current date
                           ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: db.notes[currentDate].length,
                             itemBuilder: (context, indexDate) {
@@ -192,6 +206,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               );
                             },
                           ),
+
+                          const SizedBox(height: 15,)
                         ],
                       );
                     }
