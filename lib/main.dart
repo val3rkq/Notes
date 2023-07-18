@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
+import 'pages/home_page/home_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
 
 void main() async {
   await Hive.initFlutter();
   var noteBox = await Hive.openBox('noteBox');
   // noteBox.deleteAll(noteBox.keys);
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -17,7 +16,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+      home: const HomeScreen(),
+      theme: ThemeData(
+        brightness: Brightness.dark,
+      ),
     );
   }
 }
