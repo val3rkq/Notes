@@ -4,7 +4,7 @@ class NoteDB {
 
   late Map notes;
 
-  final _noteBox = Hive.box('noteBox');
+  final _noteBox = Hive.box('box');
 
   void createInitialData() {
     notes = {};

@@ -20,7 +20,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   // database
-  var noteBox = Hive.box('noteBox');
+  var noteBox = Hive.box('box');
   NoteDB db = NoteDB();
 
   // controllers
