@@ -55,6 +55,9 @@ class _HomeScreenState extends State<HomeScreen> {
   // edit current note and put it on first position in notesList
   void editNote(int index, String date) {
     db.notes[date].removeAt(index);
+    if (db.notes[date].isEmpty) {
+      db.notes.remove(date);
+    }
     addNote();
     db.updateDB();
 
@@ -65,7 +68,6 @@ class _HomeScreenState extends State<HomeScreen> {
   // delete note by index
   void deleteNote(int index, String date) {
     db.notes[date].removeAt(index);
-    //
     if (db.notes[date].isEmpty) {
       db.notes.remove(date);
     }
