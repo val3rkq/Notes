@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:notes/constants.dart';
 import 'package:notes/model/note_db.dart';
 import 'package:notes/model/note_model.dart';
 import 'package:notes/pages/add_note_page/add_note_screen.dart';
 
-import 'widgets/rounded_btn.dart';
+import 'widgets/home_title.dart';
 import 'widgets/no_data_widget.dart';
 import 'widgets/note_slidable_tile.dart';
+import 'widgets/rounded_btn.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -20,7 +21,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   // database
-  var noteBox = Hive.box('box');
+  var noteBox = Hive.box(boxName);
   NoteDB db = NoteDB();
 
   // controllers
@@ -30,20 +31,25 @@ class _HomeScreenState extends State<HomeScreen> {
   // add new note
   void addNote() {
     DateTime now = DateTime.now();
-    String date = DateFormat('dd MMM yyyy').format(now);
+    String date = DateFormat(dateFormat).format(now);
 
+    // create new note
     Note newNote = Note(
       title: titleController.text.toString(),
       description: descriptionController.text.toString(),
       date: date,
-      time: DateFormat('kk:mm').format(now),
+      time: DateFormat(timeFormat).format(now),
     );
 
     if (!db.notes.containsKey(date)) {
       db.notes[date] = [];
     }
+    // don't forget to convert Note to Map
     db.notes[date].insert(0, newNote.toMap());
     db.updateDB();
+
+    // we don't need to use setState here,
+    // because it is used when add_note_page closes
   }
 
   // edit current note and put it on first position in notesList
@@ -51,11 +57,15 @@ class _HomeScreenState extends State<HomeScreen> {
     db.notes[date].removeAt(index);
     addNote();
     db.updateDB();
+
+    // we don't need to use setState here,
+    // because it is used when add_note_page closes
   }
 
   // delete note by index
   void deleteNote(int index, String date) {
     db.notes[date].removeAt(index);
+    //
     if (db.notes[date].isEmpty) {
       db.notes.remove(date);
     }
@@ -108,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    if (noteBox.get('NOTES') == null) {
+    if (noteBox.get(dataName) == null) {
       db.createInitialData();
     } else {
       db.loadData();
@@ -132,67 +142,50 @@ class _HomeScreenState extends State<HomeScreen> {
         scrolledUnderElevation: 0,
         titleSpacing: 10,
         toolbarHeight: 80,
-        backgroundColor: Colors.transparent,
+        backgroundColor: transparent,
         centerTitle: true,
-        title: Container(
-          padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 15),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: const Color(0xFFADFD50),
-          ),
-          width: MediaQuery.of(context).size.width,
-          alignment: Alignment.centerLeft,
-          child: Text(
-            'Notes',
-            style: GoogleFonts.bebasNeue(fontSize: 30, color: Colors.black),
-          ),
-        ),
+        title: const HomeTitle(),
       ),
-      backgroundColor: const Color(0xFF151515),
+      backgroundColor: backgroundColor,
       body: SizedBox(
         child: db.notes.isEmpty
             ? const NoDataWidget()
             : SlidableAutoCloseBehavior(
                 child: ListView.builder(
                   shrinkWrap: true,
+                  reverse: true,
                   itemCount: db.notes.length,
                   itemBuilder: (context, index) {
-                    print(db.notes);
                     // get date
                     String currentDate = db.notes.keys.toList()[index];
                     if (!db.notes[currentDate].isEmpty) {
                       return Column(
                         children: [
-                          // date
+                          // show date
                           Container(
                             padding: const EdgeInsets.only(top: 15, left: 15),
                             alignment: Alignment.topLeft,
-                            child: Text(
-                              currentDate,
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white.withOpacity(0.8),
-                              ),
-                            ),
+                            child: Text(currentDate, style: dateTextStyle),
                           ),
 
+                          // show notes for current date
                           ListView.builder(
                             shrinkWrap: true,
                             itemCount: db.notes[currentDate].length,
-                            itemBuilder: (context, index2) {
+                            itemBuilder: (context, indexDate) {
                               return NoteSlidableTile(
                                 onDelete: (context) {
-                                  deleteNote(index2, currentDate);
+                                  deleteNote(indexDate, currentDate);
                                 },
                                 onTap: () {
                                   createNote(
                                     isEdit: true,
-                                    index: index2,
+                                    index: indexDate,
                                     date: currentDate,
                                   );
                                 },
                                 db: db,
-                                index: index2,
+                                index: indexDate,
                                 date: currentDate,
                               );
                             },

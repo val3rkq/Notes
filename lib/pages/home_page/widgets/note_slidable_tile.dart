@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:notes/constants.dart';
 import 'package:notes/model/note_db.dart';
 
 import 'note_tile.dart';
@@ -32,7 +33,7 @@ class NoteSlidableTile extends StatelessWidget {
             SlidableAction(
               onPressed: onDelete,
               icon: Icons.delete_rounded,
-              backgroundColor: Colors.red,
+              backgroundColor: red,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(17),
                 bottomLeft: Radius.circular(17),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes/constants.dart';
 
 class MyTextField extends StatelessWidget {
   const MyTextField({
@@ -24,14 +25,14 @@ class MyTextField extends StatelessWidget {
       decoration: InputDecoration(
         filled: true,
         hintText: hintText,
-        hintStyle: const TextStyle(color: Colors.grey, fontSize: 16),
+        hintStyle: hintTextStyle,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey.shade800),
+          borderSide: BorderSide(color: grey8),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey.shade800),
+          borderSide: BorderSide(color: grey8),
         ),
       ),
     );

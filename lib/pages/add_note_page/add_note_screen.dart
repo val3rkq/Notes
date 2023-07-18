@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:notes/constants.dart';
+import 'package:notes/generated/l10n.dart';
 import 'package:notes/model/note_db.dart';
 
 import 'widgets/my_button.dart';
@@ -30,13 +32,13 @@ class AddNotePage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         extendBody: true,
-        backgroundColor: const Color(0xFF151515),
+        backgroundColor: backgroundColor,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,
           scrolledUnderElevation: 0,
-          backgroundColor: Colors.transparent,
+          backgroundColor: transparent,
           toolbarHeight: 70,
           leading: Padding(
             padding: const EdgeInsets.only(top: 15),
@@ -69,7 +71,7 @@ class AddNotePage extends StatelessWidget {
               // title
               MyTextField(
                 controller: titleController,
-                hintText: 'Note title',
+                hintText: S.of(context).note_title,
                 maxLines: 1,
                 autofocus: false,
               ),
@@ -80,7 +82,7 @@ class AddNotePage extends StatelessWidget {
               // description
               MyTextField(
                 controller: descriptionController,
-                hintText: 'Description',
+                hintText: S.of(context).note_description,
                 maxLines: 29,
                 autofocus: false,
               ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes/constants.dart';
 
 class RoundedButton extends StatelessWidget {
   const RoundedButton({
@@ -16,14 +17,14 @@ class RoundedButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(15),
-        decoration: const BoxDecoration(
-          color: Color(0xFFAEFF50),
+        decoration: BoxDecoration(
+          color: mainColor,
           shape: BoxShape.circle,
         ),
         child: Icon(
           icon,
           size: 25,
-          color: Colors.black,
+          color: black,
         ),
       ),
     );

@@ -11,8 +11,7 @@ class NoDataWidget extends StatelessWidget {
     return Center(
       child: Lottie.asset(
         'assets/home.json',
-        width: 300,
-        height: 300,
+        width: MediaQuery.of(context).size.width * 0.8,
       ),
     );
   }

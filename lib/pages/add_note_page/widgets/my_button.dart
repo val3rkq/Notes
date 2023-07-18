@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes/constants.dart';
 
 class MyButton extends StatelessWidget {
   const MyButton({
@@ -17,13 +18,13 @@ class MyButton extends StatelessWidget {
         child: Container(
           alignment: Alignment.center,
           margin: const EdgeInsets.only(right: 15, top: 15),
-          decoration: const BoxDecoration(
-            color: Color(0xFFAEFF50),
+          decoration: BoxDecoration(
+            color: mainColor,
             shape: BoxShape.circle
           ),
           width: 50,
           height: 50,
-          child: const Icon(Icons.check_rounded, color: Colors.black,),
+          child: Icon(Icons.check_rounded, color: black),
         ),
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes/constants.dart';
 import 'package:notes/model/note_db.dart';
 
 class NoteTile extends StatelessWidget {
@@ -19,7 +20,7 @@ class NoteTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: Colors.white12,
+        color: whiteX,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -36,10 +37,7 @@ class NoteTile extends StatelessWidget {
                   Text(
                     db.notes[date][index]['title'],
                     softWrap: false,
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.9),
-                      fontSize: 18,
-                    ),
+                    style: noteTitleTextStyle,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -50,19 +48,19 @@ class NoteTile extends StatelessWidget {
                     db.notes[date][index]['description'],
                     maxLines: 5,
                     softWrap: false,
-                    style: const TextStyle(color: Colors.white54, fontSize: 15),
+                    style: noteSubtitleTextStyle,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
             ),
           ),
-          const Align(
+          Align(
             alignment: Alignment.centerRight,
             child: Icon(
               Icons.arrow_forward_ios_rounded,
               size: 20,
-              color: Colors.white70,
+              color: white7,
             ),
           ),
         ],

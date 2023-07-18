@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes/constants.dart';
 import 'package:notes/model/note_db.dart';
 
 class TimeWidget extends StatelessWidget {
@@ -21,7 +22,7 @@ class TimeWidget extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 10, left: 5),
         child: Text(
           '$date  ${db.notes[date][index]['time']}',
-          style: const TextStyle(fontSize: 13, color: Colors.white60),
+          style: timeWidgetTextStyle,
         ),
       ),
     );
