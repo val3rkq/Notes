@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:notes/model/note_db.dart';
 import 'package:intl/intl.dart';
+import 'package:notes/model/note_db.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -33,8 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
       descriptionController.clear();
     });
     db.updateDB();
-    // // scroll to bottom
-    // SchedulerBinding.instance.addPostFrameCallback((_) => scrollToBottom());
   }
 
   // edit current note and put this on first position in notesList
@@ -59,13 +55,8 @@ class _HomeScreenState extends State<HomeScreen> {
   // delete this note
   void deleteNote(int index) {
     setState(() {
-      // dbr.notes.insert(0, db.notes[index]);
       db.notes.removeAt(index);
-
-      // dbr.descriptions.insert(0, db.descriptions[index]);
       db.descriptions.removeAt(index);
-
-      // dbr.dates.insert(0, db.dates[index]);
       db.dates.removeAt(index);
 
       titleController.clear();
@@ -131,7 +122,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
         child: ListView.builder(
-          // controller: _scrollController,
           itemCount: db.notes.length,
           itemBuilder: (context, index) {
             return Center(
@@ -248,6 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
+          scrolledUnderElevation: 0,
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
