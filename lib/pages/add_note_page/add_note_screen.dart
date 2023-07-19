@@ -33,21 +33,18 @@ class AddNotePage extends StatelessWidget {
       child: Scaffold(
         extendBody: true,
         backgroundColor: backgroundColor,
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,
           scrolledUnderElevation: 0,
           backgroundColor: transparent,
-          toolbarHeight: 70,
-          leading: Padding(
-            padding: const EdgeInsets.only(top: 15),
-            child: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(Icons.arrow_back_rounded),
-            ),
+          toolbarHeight: 85,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back_rounded),
           ),
           actions: [
             MyButton(
@@ -56,8 +53,8 @@ class AddNotePage extends StatelessWidget {
           ],
         ),
         body: Container(
-          padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
-          child: Column(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: ListView(
             children: [
               // datetime if note is editing
               isEdit
@@ -85,6 +82,10 @@ class AddNotePage extends StatelessWidget {
                 hintText: S.of(context).note_description,
                 maxLines: 29,
                 autofocus: false,
+              ),
+
+              const SizedBox(
+                height: 10,
               ),
             ],
           ),

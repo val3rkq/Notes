@@ -17,7 +17,7 @@ class MyButton extends StatelessWidget {
         alignment: Alignment.center,
         child: Container(
           alignment: Alignment.center,
-          margin: const EdgeInsets.only(right: 15, top: 15),
+          margin: const EdgeInsets.only(right: 15),
           decoration: BoxDecoration(
             color: mainColor,
             shape: BoxShape.circle
