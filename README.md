@@ -1,5 +1,5 @@
 # Notes App
-The Notes Flutter App is a simple and intuitive mobile application built using the Flutter framework. It allows users to create, edit, and delete notes on the go. This app is designed to showcase the power of Flutter in creating cross-platform applications with a native-like user experience.
+The Notes Flutter App is a simple and intuitive mobile application built using the Flutter framework with Hive for Database. It allows users to create, edit, and delete notes on the go. This app is designed to showcase the power of Flutter in creating cross-platform applications with a native-like user experience.
 
 ## Features
 - Create new notes with a title and content.
