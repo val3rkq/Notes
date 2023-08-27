@@ -9,7 +9,6 @@ The Notes Flutter App is a simple and intuitive mobile application built using t
  
 ## Installation
 Since this application has not yet been uploaded to google play, you can install it by downloading this ZIP-file on your phone
-[notes.zip](https://github.com/val3rkq/Notes/files/12448466/notes.zip)
 Link on Google Drive: https://drive.google.com/drive/folders/1RKU8oDbjkMLeh9kitz2yFFT7RfZLFplo?usp=drive_link
 
 ## License
