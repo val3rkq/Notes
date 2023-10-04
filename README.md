@@ -6,10 +6,6 @@ The Notes Flutter App is a simple and intuitive mobile application built using t
 - Edit existing notes to update their title and content.
 - Delete notes that are no longer needed.
 - Intuitive and user-friendly interface.
- 
-## Installation
-Since this application has not yet been uploaded to google play, you can install it by downloading this ZIP-file on your phone
-Link on Google Drive: https://drive.google.com/drive/folders/1RKU8oDbjkMLeh9kitz2yFFT7RfZLFplo?usp=drive_link
 
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
