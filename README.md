@@ -15,7 +15,7 @@ This app was inspired by the need for a simple and elegant notes app.
 Thanks to the Flutter team for providing such a great framework for building amazing user experiences.
 
 ## Screenshots
-![resize-image-online com_Screenshot2023082720_KbhCZ5ou](https://github.com/val3rkq/Notes/assets/87361814/39ea43aa-6630-4fd6-8094-4d9fb76c0c68)
-![resize-image-online com_Screenshot2023082720_w55jnqQ2](https://github.com/val3rkq/Notes/assets/87361814/c4546fd2-0858-4e59-9df3-82a714d8a061)
-![resize-image-online com_Screenshot2023082720_P09rOnkV](https://github.com/val3rkq/Notes/assets/87361814/666eec6c-ac66-41cd-a070-5c818e3c6ce7)
-![resize-image-online com_Screenshot2023082720_C3s0XzUM](https://github.com/val3rkq/Notes/assets/87361814/9ec074c7-6cc1-488a-bbcb-a463ff8719de)
+![resize-image-online com_Screenshot2023082720_L9JGk1Lt](https://github.com/val3rkq/Notes/assets/87361814/9a20367c-1f1f-47e8-95ea-1acf2320bbae)
+![resize-image-online com_Screenshot2023082720_d61J0gRT](https://github.com/val3rkq/Notes/assets/87361814/a0875199-728f-41d5-8f1f-2d2798885325)
+![resize-image-online com_Screenshot2023082720_y3YDK12V](https://github.com/val3rkq/Notes/assets/87361814/d5ad9831-6fcc-422f-b4e7-808693c56774)
+![resize-image-online com_Screenshot2023082720_tXQrapFn](https://github.com/val3rkq/Notes/assets/87361814/41ccde3b-433f-443c-a152-ae04a90213b5)
